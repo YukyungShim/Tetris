@@ -1,0 +1,17 @@
+{
+  "name": "neon-arcade-tetris",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Retro Neon Arcade Tetris Game with Supabase Leaderboard",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1"
+  },
+  "devDependencies": {
+    "vercel": "^46.0.0"
+  }
+}

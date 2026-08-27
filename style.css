@@ -1,0 +1,567 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  color-scheme: dark;
+  --ink: #eef0ff;
+  --muted: #9ba3d0;
+  --bg: #080b1d;
+  --panel: #111634;
+  --panel-border: #444c80;
+  --cyan: #34e7ff;
+  --pink: #ff4cb8;
+  --yellow: #ffe566;
+  --green: #58f299;
+  --red: #ff5c5c;
+  --purple: #c084fc;
+  --orange: #ff9f43;
+  --blue: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 15% 15%, #252a72 0, transparent 35%),
+              radial-gradient(circle at 85% 85%, #5c164d 0, transparent 30%),
+              radial-gradient(circle at 50% 50%, #0d1230 0, transparent 65%),
+              var(--bg);
+  color: var(--ink);
+  font-family: 'Space Mono', monospace;
+  padding: 16px 20px;
+  overflow-x: hidden;
+}
+
+/* 상단 글로벌 툴바 (오디오 컨트롤러) */
+.top-bar {
+  width: min(980px, 95vw);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.audio-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-audio {
+  background: rgba(13, 16, 40, 0.8);
+  border: 1px solid #444c80;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-audio.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px rgba(52, 231, 255, 0.3);
+  background: rgba(17, 22, 52, 0.9);
+}
+
+.btn-audio.muted {
+  border-color: var(--pink);
+  color: var(--pink);
+  box-shadow: 0 0 10px rgba(255, 76, 184, 0.3);
+}
+
+.btn-audio:hover {
+  transform: translateY(-1px);
+}
+
+/* 메인 3분할 레이아웃 (정중앙 배치) */
+.app {
+  width: min(980px, 95vw);
+  display: grid;
+  grid-template-columns: 210px minmax(330px, 420px) 280px;
+  gap: 18px;
+  align-items: start;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* 글래스모피즘 네온 패널 */
+.neon-panel {
+  background: linear-gradient(135deg, rgba(21, 27, 64, 0.92), rgba(13, 16, 40, 0.94));
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 0 25px rgba(19, 26, 85, 0.8), inset 0 0 24px rgba(8, 10, 33, 0.9);
+  border-radius: 6px;
+  padding: 18px;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.left-panel, .center-panel, .leaderboard-panel {
+  min-height: 560px;
+}
+
+/* 헤더 & 타이포그래피 */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(84, 91, 145, 0.4);
+  padding-bottom: 8px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--cyan);
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-family: 'Black Ops One', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 28px;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 var(--pink), 0 0 16px rgba(255, 76, 184, 0.6);
+}
+
+h2 {
+  color: var(--yellow);
+  font-size: 20px;
+  text-shadow: 0 0 10px rgba(255, 229, 102, 0.4);
+  margin-bottom: 12px;
+}
+
+h3 {
+  color: var(--cyan);
+  font-size: 13px;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.score-box {
+  text-align: right;
+}
+
+.score-box .label {
+  color: var(--muted);
+  font-size: 9.5px;
+  letter-spacing: 1px;
+}
+
+.score-box .value {
+  color: var(--yellow);
+  font-size: 21px;
+  font-family: 'Black Ops One', sans-serif;
+  text-shadow: 0 0 10px rgba(255, 229, 102, 0.5);
+  display: block;
+}
+
+/* 서브 패널 박스 */
+.preview-box {
+  background: rgba(7, 10, 30, 0.7);
+  border: 1px solid #303764;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.preview-box .box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 10.5px;
+  color: var(--cyan);
+}
+
+.preview-canvas {
+  display: block;
+  margin: 0 auto;
+  background: rgba(5, 7, 20, 0.6);
+  border: 1px solid #1f254d;
+  border-radius: 3px;
+}
+
+/* 라운드 정보 뱃지 */
+.stage-badge-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.badge-card {
+  background: rgba(7, 10, 30, 0.8);
+  border: 1px solid #3a4273;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.badge-card .b-label {
+  display: block;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.badge-card .b-val {
+  font-size: 17px;
+  font-family: 'Black Ops One', sans-serif;
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(52, 231, 255, 0.5);
+}
+
+.badge-card.target .b-val {
+  color: var(--pink);
+  text-shadow: 0 0 8px rgba(255, 76, 184, 0.5);
+}
+
+/* 캔버스 래퍼 */
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 10 / 20;
+  max-height: 590px;
+  margin: 0 auto;
+  border: 1px solid #545c92;
+  box-shadow: inset 0 0 35px rgba(16, 27, 100, 0.8), 0 0 20px rgba(19, 26, 85, 0.6);
+  background: linear-gradient(#080b20, #0f143a);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#mainCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* 상태바 및 하단 조작 */
+.status-bar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.status-bar .msg {
+  color: var(--muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+/* 버튼 스타일 */
+button {
+  cursor: pointer;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  background: rgba(7, 10, 30, 0.6);
+  padding: 6px 10px;
+  font: 700 11px 'Space Mono', monospace;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 8px rgba(52, 231, 255, 0.2);
+}
+
+button:hover:not(:disabled) {
+  background: var(--cyan);
+  color: #071025;
+  box-shadow: 0 0 14px var(--cyan);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button.btn-pink {
+  border-color: var(--pink);
+  color: var(--pink);
+  box-shadow: 0 0 8px rgba(255, 76, 184, 0.2);
+}
+
+button.btn-pink:hover:not(:disabled) {
+  background: var(--pink);
+  color: #071025;
+  box-shadow: 0 0 14px var(--pink);
+}
+
+button.btn-yellow {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+button.btn-yellow:hover:not(:disabled) {
+  background: var(--yellow);
+  color: #071025;
+}
+
+/* 조작 가이드 패널 */
+.controls-guide {
+  font-size: 10.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.controls-guide .key-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3.5px 0;
+  border-bottom: 1px dashed rgba(68, 76, 128, 0.4);
+}
+
+.key-tag {
+  background: #1b2149;
+  border: 1px solid #444d85;
+  color: var(--cyan);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: bold;
+}
+
+/* 글로벌 리더보드 */
+ol.ranking-list {
+  padding: 0;
+  margin: 12px 0;
+  list-style: none;
+  counter-reset: rank;
+}
+
+li.rank-row {
+  counter-increment: rank;
+  display: grid;
+  grid-template-columns: 24px 1fr 40px auto;
+  gap: 6px;
+  padding: 9px 2px;
+  border-bottom: 1px solid #262c52;
+  font-size: 11px;
+  align-items: center;
+}
+
+li.rank-row:not(.empty)::before {
+  content: counter(rank, decimal-leading-zero);
+  color: var(--pink);
+  font-weight: bold;
+}
+
+li.rank-row:first-child:not(.empty) {
+  color: var(--yellow);
+}
+
+li.rank-row .p-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+li.rank-row .p-round {
+  color: var(--cyan);
+  font-size: 10px;
+}
+
+li.rank-row .p-score {
+  font-weight: 700;
+  text-align: right;
+}
+
+.empty {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 12px 0;
+  text-align: center;
+}
+
+.notice {
+  min-height: 24px;
+  margin: 8px 0 0;
+  color: var(--cyan);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* 모달 오버레이 화면 (Start & Result Screen) */
+.overlay-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: rgba(6, 8, 26, 0.88);
+  backdrop-filter: blur(5px);
+  padding: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.overlay-screen.hidden {
+  display: none;
+}
+
+.modal-card {
+  width: min(320px, 92%);
+  text-align: center;
+  background: linear-gradient(145deg, #161c47, #0d102c);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 30px rgba(52, 231, 255, 0.3), inset 0 0 15px rgba(52, 231, 255, 0.15);
+  border-radius: 6px;
+  padding: 24px 20px;
+}
+
+.modal-card h2 {
+  font-size: 32px;
+  margin: 4px 0 16px;
+}
+
+.modal-card label {
+  display: block;
+  text-align: left;
+  color: var(--muted);
+  font-size: 10px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  background: #070a1e;
+  color: var(--ink);
+  border: 1px solid #545b91;
+  padding: 10px;
+  font: 13px 'Space Mono', monospace;
+  text-transform: uppercase;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(52, 231, 255, 0.4);
+}
+
+.name-error {
+  min-height: 16px;
+  margin: 6px 0 0;
+  color: var(--pink);
+  font-size: 10px;
+}
+
+.result-score {
+  color: var(--yellow);
+  font-size: 24px;
+  font-family: 'Black Ops One', sans-serif;
+  margin: 4px 0 6px;
+  text-shadow: 0 0 12px rgba(255, 229, 102, 0.6);
+}
+
+.result-details {
+  color: var(--cyan);
+  font-size: 11px;
+  margin-bottom: 12px;
+}
+
+.result-prompt {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* 모바일 온스크린 컨트롤러 */
+.mobile-controls {
+  display: none;
+  grid-template-columns: repeat(3, 1fr) auto repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.d-pad-btn {
+  background: rgba(18, 23, 56, 0.8);
+  border: 1px solid #3c457d;
+  color: var(--ink);
+  font-size: 16px;
+  height: 48px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font-family: 'Black Ops One', sans-serif;
+}
+
+.d-pad-btn:active {
+  background: var(--cyan);
+  color: #080b1d;
+  box-shadow: 0 0 15px var(--cyan);
+}
+
+/* 미디어 쿼리 반응형 */
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    margin: 8px auto;
+  }
+  .left-panel, .center-panel, .leaderboard-panel {
+    min-height: auto;
+  }
+  .left-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .mobile-controls {
+    display: grid;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 8px;
+  }
+  .top-bar {
+    justify-content: center;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  .left-panel {
+    grid-template-columns: 1fr;
+  }
+}

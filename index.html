@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080b1d" />
+    <title>NEON TETRIS // 1988 Arcade Tengen Tribute</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 상단 글로벌 툴바 (오디오 컨트롤) -->
+    <nav class="top-bar">
+      <div class="audio-controls">
+        <button id="bgmToggleBtn" type="button" class="btn-audio active" title="배경음악 켜기/끄기">🎵 BGM ON</button>
+        <button id="sfxToggleBtn" type="button" class="btn-audio active" title="효과음 켜기/끄기">🔊 SFX ON</button>
+        <button id="muteAllBtn" type="button" class="btn-audio" title="전체 음소거">🔇 MUTE ALL</button>
+      </div>
+    </nav>
+
+    <main class="app">
+      <!-- 1. 좌측 패널 (HOLD, NEXT, Controls) -->
+      <aside class="neon-panel left-panel">
+        <div class="preview-box">
+          <div class="box-header">
+            <span>HOLD [C / SHIFT]</span>
+          </div>
+          <canvas id="holdCanvas" class="preview-canvas" width="110" height="74"></canvas>
+        </div>
+
+        <div class="preview-box">
+          <div class="box-header">
+            <span>NEXT PIECE</span>
+          </div>
+          <canvas id="nextCanvas1" class="preview-canvas" width="110" height="70"></canvas>
+          <div style="margin-top: 8px; display: flex; gap: 6px; justify-content: center;">
+            <canvas id="nextCanvas2" class="preview-canvas" width="50" height="46"></canvas>
+            <canvas id="nextCanvas3" class="preview-canvas" width="50" height="46"></canvas>
+          </div>
+        </div>
+
+        <div class="controls-guide">
+          <h3>CONTROLS</h3>
+          <div class="key-row"><span>이동</span><span class="key-tag">← → / A D</span></div>
+          <div class="key-row"><span>소프트 드롭</span><span class="key-tag">↓ / S</span></div>
+          <div class="key-row"><span>하드 드롭</span><span class="key-tag">SPACE</span></div>
+          <div class="key-row"><span>우회전</span><span class="key-tag">↑ / W / X</span></div>
+          <div class="key-row"><span>좌회전</span><span class="key-tag">Z / CTRL</span></div>
+          <div class="key-row"><span>홀드</span><span class="key-tag">C / SHIFT</span></div>
+          <div class="key-row"><span>일시정지</span><span class="key-tag">P / ESC</span></div>
+        </div>
+      </aside>
+
+      <!-- 2. 중앙 메인 패널 (10x20 그리드 및 메인 보드) -->
+      <section class="neon-panel center-panel">
+        <header>
+          <div>
+            <p class="eyebrow">ARCADE // 1988 TENGEN TRIBUTE</p>
+            <h1>NEON TETRIS</h1>
+          </div>
+          <div class="score-box">
+            <span class="label">HIGH / SCORE</span>
+            <strong id="scoreDisplay" class="value">00000000</strong>
+          </div>
+        </header>
+
+        <!-- 라운드 및 남은 줄 수 뱃지 -->
+        <div class="stage-badge-container">
+          <div class="badge-card">
+            <span class="b-label">STAGE / ROUND</span>
+            <span id="roundDisplay" class="b-val">01</span>
+          </div>
+          <div class="badge-card target">
+            <span class="b-label">LINES LEFT</span>
+            <span id="linesLeftDisplay" class="b-val">15</span>
+          </div>
+        </div>
+
+        <!-- 캔버스 영역 -->
+        <div class="canvas-wrapper">
+          <canvas id="mainCanvas" width="300" height="600" aria-label="네온 테트리스 메인 보드"></canvas>
+
+          <!-- 시작 화면 모달 -->
+          <div id="startScreen" class="overlay-screen">
+            <div class="modal-card">
+              <p class="eyebrow">PLAYER IDENTIFICATION</p>
+              <h2>READY?</h2>
+              <label for="playerName">닉네임</label>
+              <input id="playerName" maxlength="12" placeholder="CYBER_HERO" autocomplete="nickname" autofocus />
+              <button id="startGameBtn" type="button" style="width: 100%; margin-top: 12px;">게임 시작</button>
+              <p id="nameError" class="name-error" role="alert"></p>
+            </div>
+          </div>
+
+          <!-- 게임 오버 / 클리어 결과 모달 -->
+          <div id="resultScreen" class="overlay-screen hidden">
+            <div class="modal-card">
+              <p id="resultKicker" class="eyebrow">GAME OVER</p>
+              <h2 id="resultTitle">RESULT</h2>
+              <p id="resultScore" class="result-score">000000 PTS</p>
+              <p id="resultDetails" class="result-details">ROUND 01 · 00 LINES</p>
+              <p id="resultPrompt" class="result-prompt">이 기록을 글로벌 랭킹에 등록할까요?</p>
+              <div class="result-actions">
+                <button id="saveScoreBtn" type="button">랭킹 등록</button>
+                <button id="skipScoreBtn" type="button" class="btn-pink">건너뛰기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 상태 및 제어 버튼 -->
+        <div class="status-bar">
+          <span id="statusMessage" class="msg">스페이스 바로 시작하세요</span>
+          <div class="btn-group">
+            <button id="pauseBtn" type="button">PAUSE</button>
+            <button id="restartBtn" type="button" class="btn-pink">RESTART</button>
+          </div>
+        </div>
+
+        <!-- 모바일 가상 온스크린 패드 -->
+        <div class="mobile-controls">
+          <button id="btnMvLeft" class="d-pad-btn" type="button">◀</button>
+          <button id="btnSoftDrop" class="d-pad-btn" type="button">▼</button>
+          <button id="btnMvRight" class="d-pad-btn" type="button">▶</button>
+          <div></div>
+          <button id="btnHold" class="d-pad-btn" type="button">⬒</button>
+          <button id="btnRotCw" class="d-pad-btn" type="button">↻</button>
+          <button id="btnHardDrop" class="d-pad-btn btn-yellow" type="button">⚡</button>
+        </div>
+      </section>
+
+      <!-- 3. 글로벌 랭킹 패널 (Supabase Leaderboard) -->
+      <aside class="neon-panel leaderboard-panel">
+        <p class="eyebrow">GLOBAL HIGH SCORES</p>
+        <h2>RANKING</h2>
+        <ol id="rankingList" class="ranking-list">
+          <li class="empty">랭킹을 불러오는 중…</li>
+        </ol>
+        <p id="rankNotice" class="notice"></p>
+      </aside>
+    </main>
+
+    <!-- 배경음악 로컬 오디오 (bgm.mp3) -->
+    <audio id="bgmAudio" src="bgm.mp3" loop preload="auto"></audio>
+
+    <script src="tetris.js"></script>
+  </body>
+</html>

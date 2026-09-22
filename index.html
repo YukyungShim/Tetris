@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#080b1d" />
-    <title>NEON TETRIS // 1988 Arcade Tengen Tribute</title>
+    <title>TETRIS</title>
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -54,8 +57,10 @@
       <section class="neon-panel center-panel">
         <header>
           <div>
-            <p class="eyebrow">ARCADE // 1988 TENGEN TRIBUTE</p>
-            <h1>NEON TETRIS</h1>
+            <div class="title-row">
+              <h1>TETRIS</h1>
+              <span class="credit">made by Yukyung, Shim</span>
+            </div>
           </div>
           <div class="score-box">
             <span class="label">HIGH / SCORE</span>
@@ -77,7 +82,7 @@
 
         <!-- 캔버스 영역 -->
         <div class="canvas-wrapper">
-          <canvas id="mainCanvas" width="300" height="600" aria-label="네온 테트리스 메인 보드"></canvas>
+          <canvas id="mainCanvas" width="300" height="600" aria-label="테트리스 메인 보드"></canvas>
 
           <!-- 시작 화면 모달 -->
           <div id="startScreen" class="overlay-screen">

@@ -1,6 +1,6 @@
 /**
- * NEON ARCADE TETRIS (1988 Tengen Arcade Tribute)
- * Full Game Engine with Web Audio SFX, YouTube BGM (Korobeiniki Synthwave),
+ * TETRIS — made by Yukyung, Shim
+ * Full Game Engine with Web Audio SFX, Original Synthwave BGM (bgm.mp3),
  * Canvas Neon Effects, SRS Wall Kicks, Stage/Garbage Map System, and Supabase Leaderboard.
  */
 

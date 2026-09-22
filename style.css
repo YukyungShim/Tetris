@@ -138,6 +138,20 @@ h1 {
   text-shadow: 2px 2px 0 var(--pink), 0 0 16px rgba(255, 76, 184, 0.6);
 }
 
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
+.credit {
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
 h2 {
   color: var(--yellow);
   font-size: 20px;
